@@ -31,9 +31,9 @@ trimming:
 # reference files for alignment with STAR
 ref:
   # the STAR index
-  index: "/grid/meyer/home/common/public/annotations/genome/mouse/GRCm38/STARINDEX"
+  index: "/grid/meyer/home/common/public/annotations/genome/human/GRCh38/STARINDEX"
   # gtf file with transcripts
-  annotation: "/grid/meyer/home/common/public/annotations/genome/mouse/GRCm38/mouse.GRCm38.gtf"
+  annotation: "/grid/meyer/home/common/public/annotations/genome/huamn/GRCh38/mouse.GRCh38.gtf"
 
 
 # Settings for PCA on rlog-normalised count data; all values indicate column
@@ -55,19 +55,16 @@ diffexp:
   # overall design for deseq2
   design: " ~ individual + condition"
   # organism name for annotation hub
-  organism: "mouse"
+  organism: "Human"
   collapse: false
   # contrasts for the deseq2 results method
   contrasts:
-    aa-vs-control:
-      - aa
-      - control
-    pge2-vs-control:
-      - pge2
-      - control
-    pge2-vs-aa:
-      - pge2
-      - aa
+    Adenocarcinoma-vs-Squamous:
+      - Adenocarcinomaaa
+      - Squamous
+    early-vs-late:
+      - early
+      - late
 
 fgsea:
   #do the gene set files have descriptions?
