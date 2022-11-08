@@ -65,4 +65,3 @@ local computer (this is where storing them in the same location relative to the 
 * explore the results; 
 * forward to your collaborators.
 
-This workflow is based on [rna-seq-star-deseq2](https://github.com/snakemake-workflows/rna-seq-star-deseq2/releases).
