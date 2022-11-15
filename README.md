@@ -12,8 +12,8 @@ bundles there results in a qc report via [MultiQC](https://multiqc.info/). Repor
 
 #### Step 1: Configure workflow
 
-You will likely run these analyses on the HPCC (currently Elzar), but you will want access to the results locally.
-Our strategy is to have the analysis repository on the local machine and on the HPCC, in the same file path location
+You will likely run these analyses on the HPCC, but you will want access to the results locally.
+My strategy is to have the analysis repository on the local machine and on the HPCC, in the same file path location
 (relative to the home directory). 
 
 We will start by creating the local repository (on your computer): 
