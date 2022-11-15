@@ -25,12 +25,13 @@ dds@colData
 dds@colData
 dds$sample
 levels(dds@colData$Intersect)
-my_levels <- c("adenocarcinoma_Early", "adenocarcinoma_Late",   "squamous_Early",   "squamous_Late")
+my_levels <- c("adenocarcinoma_Late", "squamous_Late", "adenocarcinoma_Early",   "squamous_Early"  )
 dds@colData$Intersect <- my_levels
 dds@colData$Intersect <- factor(dds@colData$Intersect,levels = my_levels)
 design(dds) <- formula(~Cancer)
 dds <- DESeq(dds)
 resultsNames(dds)
+dds
 {
   results(dds)
   
@@ -74,16 +75,19 @@ resultsNames(dds)
   Normalized_mean_counts$Gene_Name <- mcols(dds)$symbol
   Normalized_mean_counts$Zscore <- mcols(dds)$Intersect_Naive_Experimental_vs_Naive_Control
   Normalized_mean_counts[complete.cases(Normalized_mean_counts),]
-  Normalized_mean_counts <- Normalized_mean_counts[order(-Normalized_mean_counts$Zscore),]
-  
-  write.csv(Normalized_mean_counts, 'Cancer_squamous_vs_adenocarcinoma.csv')
+  write.csv(Normalized_mean_counts, 'Cancer_squamous_vs_adenocarcinoma_counts.csv')
 }
-
+sva_E
+sva_L <- res_format
 #rld <- rlog(dds, blind=FALSE)
 
 #Normalized_mean_counts <- assays(rld)[['rlog']]
 EnhancedVolcano(res_format, lab = res_format$gene_name, x = 'log2FoldChange', y = 'padj', title = 'Squamous vs Adenocarcinoma', pCutoff = .05, FCcutoff = 1, xlim = c(-7,12), ylim = c(0,10) )
 tail(res_format)
+
+EnhancedVolcano(sva_E, lab = res_format$gene_name, x = 'log2FoldChange', y = 'padj', title = 'Early squamous vs adenocarcinoma', pCutoff = .05, FCcutoff = 1, xlim = c(-5,7.5), ylim = c(0,6) )
+EnhancedVolcano(sva_L, lab = res_format$gene_name, x = 'log2FoldChange', y = 'padj', title = 'Late squamous vs adenocarcinoma', pCutoff = .05, FCcutoff = 1, xlim = c(-3,8), ylim = c(0,6) )
+
 
 Heatmap_data <- data.frame(res_format)
 MHC_Genes <- c('H2-q1','H2-T3','H2-DMb2','H2-T10','H2-Ea-ps','H2-Q10','H2-D1')
@@ -200,4 +204,20 @@ ggplot(data = Filter_GEO_MARKERS,aes(x=pathway,y=NES )) + theme_cem +
   coord_flip() +
   labs(y= "Normalized Enrichment Score", x="Pathway") 
 ggsave(file="GSEA_Bubble_naive_EVC.pdf",  width=5, height=3, units="in")
+
+
+#heiarchical clustering
+vsd <- vst(dds, blind=FALSE)
+sampleDists <- dist(t(assay(vsd)))
+library("RColorBrewer")
+library("pheatmap")
+
+sampleDistMatrix <- as.matrix(sampleDists)
+rownames(sampleDistMatrix) <- paste(vsd$stage, vsd$Cancer, sep="-")
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows=sampleDists,
+         clustering_distance_cols=sampleDists,
+         col=colors)
 
